@@ -6,7 +6,7 @@
         {
             "label": "Deploy to Boxstarter repo",
             "type": "shell",
-            "command": ".vscode/tasks/deploy_boxstarter.ps1",
+            "command": ".vscode/tasks/deploy.ps1",
             "problemMatcher": []
         }
     ]
