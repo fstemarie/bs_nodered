@@ -3,14 +3,29 @@ if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]:
 Import-Module Boxstarter.Bootstrapper
 Import-Module Boxstarter.Chocolatey
 
+$nuspec = @"
+<?xml version="1.0"?>
+<package>
+  <metadata>
+    <id>bs_nodered</id>
+    <version>1.0.0</version>
+    <authors>francois</authors>
+    <owners>francois</owners>
+    <description>Script d'installation de Node-RED</description>
+    <tags>Boxstarter</tags>
+  </metadata>
+</package>
+"@
 $src = Join-Path $PSScriptRoot ".." ".." "src" "*"
-$dst = "\\raktar.local\boxstarter"
+$dst = "E:\boxstarter"
 $Boxstarter.LocalRepo = $dst
 $dst = Join-Path $dst "bs_nodered"
 
 if (Test-Path -Path $dst) {
-    Remove-Item -Path $dst -Recurse -Force -ErrorAction SilentlyContinue
+    Write-Host "Deleting directory..."
+    Remove-Item -Path $dst -Force -Recurse -ErrorAction SilentlyContinue
 }
-New-BoxstarterPackage -Name "bs_nodered" -Description "Script d'installation de Node-RED"
-Copy-Item -Path $src -Destination $dst -Recurse -Force
+New-Item -Path $dst -ItemType Directory
+New-Item -Path (Join-Path $dst "bs_nodered.nuspec") -ItemType File -Value $nuspec
+Copy-Item -Path $src -Destination $dst -Recurse
 Invoke-BoxStarterBuild -Name "bs_nodered"
